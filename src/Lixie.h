@@ -25,7 +25,8 @@ Released under the GPLv3 license.
 #define COLOR_ORDER GRB
 #endif
 
-class Lixie {
+class Lixie
+{
 public:
   Lixie(const uint8_t pin, uint8_t nDigits);
   void begin();

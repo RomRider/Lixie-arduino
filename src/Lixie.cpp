@@ -62,7 +62,7 @@ void Lixie::begin()
     colors_off[i] = CRGB(0, 0, 0);
     digit_brightness[i] = 255;
   }
-  white_balance(Tungsten100W);
+  //white_balance(ClearBlueSky);
   clear();
 }
 
@@ -446,7 +446,7 @@ void Lixie::write(uint32_t input)
       input = (input % nPlace);
   }
 
-  show();
+  //show();
 }
 
 void print_array(byte *arr, byte sz)
@@ -566,7 +566,7 @@ void Lixie::write_fade(uint32_t input, uint16_t fade_time)
   byte div = 20;
   byte step = fade_time / (255 / div) / 4;
 
-  show();
+  // show();
 
   for (int f = 255; f > 0; f -= div)
   {
@@ -607,6 +607,80 @@ void Lixie::write_fade(uint32_t input, uint16_t fade_time)
     digit_brightness[i] = 255;
   }
   show();
+  store_current(input);
+}
+
+/*
+TEST FUNCTION FADE WITH TRANSITION
+*/
+void Lixie::write_fade_trans(uint32_t input, uint16_t fade_time)
+{
+  byte new_number_arr[20];
+  char buf[20];
+
+  for (byte i = 0; i < 20; i++)
+  {
+    new_number_arr[i] = 255;
+    buf[i] = '0';
+  }
+
+  byte inputLength = get_size(input); // 5
+  byte startDigitIndex = 0;           // 0
+  if (inputLength > NumDigits)        // true
+  {
+    startDigitIndex = inputLength - NumDigits; // 5 - 4 = 1
+  }
+
+  sprintf(buf, "%lu", input); // int to char array
+
+  for (byte i = startDigitIndex; i < inputLength; i++)
+  {
+    byte d = char_to_number(buf[i]);
+    if (d <= 9)
+    {
+      new_number_arr[i - startDigitIndex] = d; // char to int
+    }
+  }
+
+  byte div = 20;
+  byte step = fade_time / (255 / div) / 4;
+
+  for (int f = 255; f > 0; f -= div)
+  {
+    for (byte i = 0; i < NumDigits; i++)
+    {
+      if (new_number_arr[i] != current_number_arr[i])
+      {
+        byte lix_index = NumDigits - 1 - i;
+        uint16_t start = (lix_index * LEDsPerDigit);
+        uint16_t prevLED1 = start + Addresses[current_number_arr[i]];
+        uint16_t prevLED2 = start + Addresses[current_number_arr[i]] + 10;
+        uint16_t nextLED1 = start + Addresses[new_number_arr[i]];
+        uint16_t nextLED2 = start + Addresses[new_number_arr[i]] + 10;
+
+        leds[prevLED1].r = colors[i].r * f / 255.0;
+        leds[prevLED1].g = colors[i].g * f / 255.0;
+        leds[prevLED1].b = colors[i].b * f / 255.0;
+        leds[prevLED2].r = colors[i].r * f / 255.0;
+        leds[prevLED2].g = colors[i].g * f / 255.0;
+        leds[prevLED2].b = colors[i].b * f / 255.0;
+        leds[nextLED1].r = colors[i].r * (255 - f) / 255.0;
+        leds[nextLED1].g = colors[i].g * (255 - f) / 255.0;
+        leds[nextLED1].b = colors[i].b * (255 - f) / 255.0;
+        leds[nextLED2].r = colors[i].r * (255 - f) / 255.0;
+        leds[nextLED2].g = colors[i].g * (255 - f) / 255.0;
+        leds[nextLED2].b = colors[i].b * (255 - f) / 255.0;
+        //digit_brightness[lix_index] = f;
+      }
+    }
+    controller->showLeds();
+    delay(step);
+  }
+
+  for (byte i = 0; i < NumDigits; i++)
+  {
+    digit_brightness[i] = 255;
+  }
   store_current(input);
 }
 

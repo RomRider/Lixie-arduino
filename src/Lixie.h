@@ -41,6 +41,7 @@ public:
   void write_flip(uint32_t input, uint16_t flip_time = 100,
                   uint8_t flip_speed = 10);
   void write_fade(uint32_t input, uint16_t fade_time = 250);
+  void write_fade_trans(uint32_t input, uint16_t fade_time = 250);
 
   void sweep(CRGB col, byte speed = 15);
   void progress(float percent, CRGB col1, CRGB col2);

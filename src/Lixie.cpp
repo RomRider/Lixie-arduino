@@ -63,7 +63,6 @@ void Lixie::begin()
     digit_brightness[i] = 255;
   }
   white_balance(Tungsten100W);
-  store_current(0);
   clear();
 }
 
@@ -447,7 +446,7 @@ void Lixie::write(uint32_t input)
       input = (input % nPlace);
   }
 
-  // show();
+  show();
 }
 
 void print_array(byte *arr, byte sz)

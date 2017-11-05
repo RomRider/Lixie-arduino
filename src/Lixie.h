@@ -108,7 +108,7 @@ private:
   void build_controller(uint8_t DataPin);
   uint32_t current_number = 0;
   byte current_number_size = 0;
-  byte current_number_arr[20];
+  byte current_number_arr[20] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255};
   void store_current(uint32_t input);
 
   bool nixie = false;

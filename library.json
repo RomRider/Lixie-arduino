@@ -12,8 +12,11 @@
     "type": "git",
     "url": "https://github.com/connornishijima/Lixie-arduino.git"
   },
+  "dependencies": {
+    "FastLED": ">=3.0.0"
+  },
   "version": "1.4.0",
-  "examples": "examples/*.ino",
+  "examples": "examples/*/*.ino",
   "frameworks": "arduino",
   "platforms":
   [

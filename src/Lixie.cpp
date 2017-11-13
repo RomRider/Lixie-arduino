@@ -681,6 +681,10 @@ void Lixie::write_fade_trans(uint32_t input, uint16_t fade_time)
   {
     digit_brightness[i] = 255;
   }
+  setBit(prevLED1, 0);
+  setBit(prevLED2, 0);
+  setBit(nextLED1, 1);
+  setBit(nextLED2, 1);
   store_current(input);
 }
 

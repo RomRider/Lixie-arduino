@@ -680,10 +680,23 @@ void Lixie::write_fade_trans(uint32_t input, uint16_t fade_time)
   {
     digit_brightness[i] = 255;
   }
-  setBit(prevLED1, 0);
-  setBit(prevLED2, 0);
-  setBit(nextLED1, 1);
-  setBit(nextLED2, 1);
+  
+  for (byte i = 0; i < NumDigits; i++)
+  {
+    if (new_number_arr[i] != current_number_arr[i])
+    {
+      byte lix_index = NumDigits - 1 - i;
+      uint16_t start = (lix_index * LEDsPerDigit);
+      uint16_t prevLED1 = start + Addresses[current_number_arr[i]];
+      uint16_t prevLED2 = prevLED1 + 10;
+      uint16_t nextLED1 = start + Addresses[new_number_arr[i]];
+      uint16_t nextLED2 = nextLED1 + 10;
+      setBit(prevLED1, 0);
+      setBit(prevLED2, 0);
+      setBit(nextLED1, 1);
+      setBit(nextLED2, 1);
+    }
+  }
   store_current(input);
 }
 

@@ -644,7 +644,7 @@ void Lixie::write_fade_trans(uint32_t input, uint16_t fade_time)
   byte div = 20;
   byte step = fade_time / (255 / div) / 4;
 
-  for (int f = 255; f > 0; f -= div)
+  for (int f = 255; f >= 0; f -= div)
   {
     for (byte i = 0; i < NumDigits; i++)
     {
@@ -680,7 +680,7 @@ void Lixie::write_fade_trans(uint32_t input, uint16_t fade_time)
   {
     digit_brightness[i] = 255;
   }
-  
+
   for (byte i = 0; i < NumDigits; i++)
   {
     if (new_number_arr[i] != current_number_arr[i])
